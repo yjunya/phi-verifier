@@ -11,6 +11,7 @@ import { createPublicClient, http } from "viem";
 import {
   arbitrum,
   base,
+  berachainTestnet,
   mainnet,
   optimism,
   scroll,
@@ -67,6 +68,11 @@ const getClient = (chain?: string) => {
       return createPublicClient({
         chain: zkSync,
         transport: http(process.env.RPC_ZKSYNC_ERA),
+      });
+    case "berachain_testnet":
+      return createPublicClient({
+        chain: berachainTestnet,
+        transport: http(process.env.RPC_BERACHAIN_TESTNET),
       });
     default:
       throw new CustomError(ErrorCodes.InvalidChain);
