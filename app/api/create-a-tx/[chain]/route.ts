@@ -24,12 +24,14 @@ const handler: VerifierApi = async (req, { params }) => {
   const client = getClient(params?.chain);
 
   const txCount = await client.getTransactionCount({ address });
-  const result = txCount > 0;
-  const counter = BigInt(txCount > 0);
+  const mintEligibility = txCount > 0;
 
-  const signature = await createSignature({ address, result, counter });
+  const signature = await createSignature({
+    address,
+    mint_eligibility: mintEligibility,
+  });
 
-  return NextResponse.json({ signature, result, counter: counter.toString() });
+  return NextResponse.json({ signature, mint_eligibility: mintEligibility });
 };
 
 const getClient = (chain?: string) => {

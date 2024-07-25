@@ -16,12 +16,14 @@ const handler: VerifierApi = async (req, { params }) => {
   const address = getAddress(req);
   const endpoint = getEndpoint(params?.chain);
 
-  const result = await isContractDeployed(endpoint, address);
-  const counter = BigInt(result);
+  const mintEligibility = await isContractDeployed(endpoint, address);
 
-  const signature = await createSignature({ address, result, counter });
+  const signature = await createSignature({
+    address,
+    mint_eligibility: mintEligibility,
+  });
 
-  return NextResponse.json({ signature, result, counter: counter.toString() });
+  return NextResponse.json({ signature, mint_eligibility: mintEligibility });
 };
 
 const isContractDeployed = async (
