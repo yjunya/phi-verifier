@@ -3,8 +3,8 @@ import { Hex } from "viem";
 
 export type VerifierApiResponce = NextResponse<{
   signature: Hex;
-  result: boolean;
-  counter: string;
+  mint_eligibility: boolean;
+  data?: string;
 }>;
 
 export type VerifierApi = (
