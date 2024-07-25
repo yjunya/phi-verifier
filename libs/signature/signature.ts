@@ -12,16 +12,16 @@ import { sign } from "viem/accounts";
 
 export async function createSignature({
   address,
-  result,
-  counter,
+  mint_eligibility,
+  data,
 }: {
   address: Address;
-  result: boolean;
-  counter: bigint;
+  mint_eligibility: boolean;
+  data?: string;
 }): Promise<Hex> {
   const encodedData = encodeAbiParameters(
-    parseAbiParameters("address, bool, uint256"),
-    [address, result, counter]
+    parseAbiParameters("address, bool, bytes32"),
+    [address, mint_eligibility, toHex(data || 0, { size: 32 })]
   );
   const { r, s, v } = await sign({
     hash: hashMessage({ raw: toBytes(keccak256(encodedData)) }),
@@ -31,6 +31,6 @@ export async function createSignature({
   if (v !== BigInt(27)) {
     sBigInt = sBigInt | (BigInt(1) << BigInt(255));
   }
-  const sHex = toHex(sBigInt);
+  const sHex = toHex(sBigInt, { size: 32 });
   return `0x${r.slice(2)}${sHex.slice(2)}`;
 }
