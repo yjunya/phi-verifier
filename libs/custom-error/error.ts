@@ -10,6 +10,7 @@ type DefaultErrorCode = Values<typeof DefaultErrorCodes>;
 const CustomErrorCodes = {
   InvalidAddress: 400001,
   InvalidChain: 400002,
+  EtherscanFailed: 400003,
 } as const;
 type CustomErrorCode = Values<typeof CustomErrorCodes>;
 
@@ -52,6 +53,11 @@ const errorCodeToConfig: Record<ErrorCode, ErrorConfig> = {
     ...defaultErrorCodeToConfig[ErrorCodes.BadRequest],
     custom_error_code: ErrorCodes.InvalidChain,
     message: "Invalid Chain.",
+  },
+  [ErrorCodes.EtherscanFailed]: {
+    ...defaultErrorCodeToConfig[ErrorCodes.BadRequest],
+    custom_error_code: ErrorCodes.EtherscanFailed,
+    message: "Request to etherscan is failed.",
   },
 };
 

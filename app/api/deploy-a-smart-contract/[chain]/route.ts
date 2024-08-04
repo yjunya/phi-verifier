@@ -32,11 +32,12 @@ const isContractDeployed = async (
 ): Promise<boolean> => {
   let startblock = "0";
   while (true) {
-    const query = `?module=account&action=txlist&address=${address}&startblock=${startblock}&sort=asc&apikey=${process.env.ETHERSCAN_API_KEY}`;
+    const query = `?apikey=${process.env.ETHERSCAN_API_KEY}&module=account&action=txlist&startblock=${startblock}&sort=asc&address=${address}`;
     const responce = await fetch(endpoint + query);
     const body = await responce.json();
 
-    if (!body || body.message !== "OK") return false;
+    if (!body || !Array.isArray(body.result))
+      throw new CustomError(ErrorCodes.EtherscanFailed);
 
     const txlist = body.result as Transaction[];
 
